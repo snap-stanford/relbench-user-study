@@ -3,3 +3,4 @@
 __pycache__/
 .vscode/
 relbench-data-exploration-and-instructions.ipynb
+.DS_Store
