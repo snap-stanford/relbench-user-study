@@ -1,4 +1,4 @@
-create table engage_{{ set }}_feats as
+create or replace table engage_{{ set }}_feats as
 
 with labels as (
     select * from engage_{{ set }}
