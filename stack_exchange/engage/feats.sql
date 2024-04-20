@@ -1,7 +1,7 @@
-create table churn_feats_train as
+create table engage_{{ set }}_feats as
 
 with labels as (
-    select * from train_labels
+    select * from engage_{{ set }}
 ),
 
 badge_freqs as (
@@ -33,7 +33,6 @@ user_feats as (
         labels.OwnerUserId as user_id,
         labels.timestamp,
         date_diff('month', users.CreationDate, labels.timestamp) as months_since_account_creation,
-        -- Leakage here ??
         (users.DisplayName is null) as display_name_is_null,
         (users.WebsiteUrl is null) as website_url_is_null,
         coalesce(len(string_split(users.AboutMe, ' ')), 0) as about_me_length,
@@ -230,7 +229,9 @@ select
     -- labels
     labels.OwnerUserId as user_id,
     labels.timestamp,
-    labels.contribution,
+    {% if set != 'test' +%}
+        labels.contribution,
+    {% endif %}
     -- user-level features
     user_feats.months_since_account_creation,
     user_feats.display_name_is_null,
