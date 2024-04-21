@@ -13,11 +13,13 @@ def db_setup(db_name: str, cache_dir: str | None = None):
     votes = dataset.db.table_dict['votes'].df  # noqa
     badges = dataset.db.table_dict['badges'].df  # noqa
     comments = dataset.db.table_dict['comments'].df  # noqa
+    post_history = dataset.db.table_dict['postHistory'].df  # noqa
     conn.sql('create table users as select * from users')
     conn.sql('create table posts as select * from posts')
     conn.sql('create table votes as select * from votes')
     conn.sql('create table badges as select * from badges')
     conn.sql('create table comments as select * from comments')
+    conn.sql('create table post_history as select * from post_history')
     for task_name in ['engage', 'badges', 'votes']:
         task = dataset.get_task(f'rel-stackex-{task_name}', process=True)
         train_table = task.train_table.df  # noqa
@@ -26,6 +28,7 @@ def db_setup(db_name: str, cache_dir: str | None = None):
         conn.sql(f'create table {task_name}_train as select * from train_table')
         conn.sql(f'create table {task_name}_val as select * from val_table')
         conn.sql(f'create table {task_name}_test as select * from test_table')
+    conn.close()
 
 
 def render_jinja_sql(query: str, context: dict) -> str:
