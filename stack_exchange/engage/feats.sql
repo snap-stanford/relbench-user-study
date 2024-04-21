@@ -1,7 +1,7 @@
-create or replace table engage_{{ set }}_feats as
+create or replace table engage_{{ set }}_feats as -- noqa
 
 with labels as (
-    select * from engage_{{ set }}
+    select * from engage_{{ set }} -- noqa
 ),
 
 badge_freqs as (
@@ -229,7 +229,7 @@ select
     -- labels
     labels.OwnerUserId as user_id,
     labels.timestamp,
-    {% if set != 'test' +%}
+    {% if set != 'test' +%} -- noqa
         labels.contribution,
     {% endif %}
     -- user-level features
