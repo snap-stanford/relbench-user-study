@@ -17,6 +17,10 @@ badge_feats_deagged as (
         labels.UserId as user_id,
         labels.timestamp,
         badges.Id,
+        case
+            when badge_freqs.badge_incidence >= 0.01 then badges.Name
+            else 'OTHER'
+        end as badge_name,
         log(1 / badge_freqs.badge_incidence) as rarity,
         date_diff('week', badges.Date, labels.timestamp) as badge_age_weeks,
         date_diff(
@@ -45,8 +49,9 @@ badge_feats as (
         coalesce(sum(rarity), 0) as badge_score,
         coalesce(max(rarity), 0) as max_rarity,
         coalesce(avg(rarity), 0) as avg_rarity,
-        first(badge_age_weeks order by rarity desc) as rarest_badge_age_weeks,
+        first(badge_name order by badge_age_weeks asc) as last_badge_name,
         first(rarity order by badge_age_weeks asc) as last_badge_rarity,
+        first(badge_age_weeks order by rarity desc) as rarest_badge_age_weeks,
         min(badge_age_weeks) as last_badge_weeks_ago,
         avg(badge_age_weeks) as avg_badge_age_weeks,
         avg(weeks_since_prev_badge) as avg_weeks_bw_badges,
@@ -238,6 +243,7 @@ select
     badge_feats.badge_score,
     badge_feats.max_rarity,
     badge_feats.avg_rarity,
+    badge_feats.last_badge_name,
     badge_feats.rarest_badge_age_weeks,
     badge_feats.last_badge_rarity,
     badge_feats.last_badge_weeks_ago,
