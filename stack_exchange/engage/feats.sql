@@ -189,7 +189,6 @@ question_feats_last_6mo as (
         avg(num_tags) as avg_num_tags,
         avg(title_length) as avg_title_length,
         avg(body_length) as avg_body_length,
-        -- lateral join bugging out here
         avg(num_positive_votes) as avg_num_positive_votes,
         avg(num_negative_votes) as avg_num_negative_votes,
         avg(num_comments) as avg_num_comments,
