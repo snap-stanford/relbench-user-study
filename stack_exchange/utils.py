@@ -5,9 +5,10 @@ from relbench.datasets import get_dataset
 from sklearn.feature_selection import mutual_info_classif
 
 
+# Run `python -c "from utils import db_setup; db_setup('stackex.db');` to create the database
 def db_setup(db_name: str, cache_dir: str | None = None):
     conn = duckdb.connect(db_name)
-    dataset = get_dataset(name='rel-math-stackex', process=True, cache_dir=cache_dir)
+    dataset = get_dataset(name='rel-stackex', process=True, cache_dir=cache_dir)
     users = dataset.db.table_dict['users'].df  # noqa
     posts = dataset.db.table_dict['posts'].df  # noqa
     votes = dataset.db.table_dict['votes'].df  # noqa
