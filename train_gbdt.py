@@ -94,7 +94,6 @@ def map_preds(feats_df, labels, identifier_cols, preds):
     new_preds = np.array(
         [preds[idx_map[tuple(row.to_list())]] for _, row in labels[identifier_cols].iterrows()]
     )
-    breakpoint()
     return new_preds
 
 
