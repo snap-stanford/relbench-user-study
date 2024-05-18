@@ -45,7 +45,7 @@ review_aggs as (
         max(date_diff('weeks', review.review_time, labels.timestamp)) as weeks_since_first_review,
         count(*) as num_reviews,
         sum(review.rating) as sum_review_ratings,
-        avg(length(review.summary)) as avg_review_length,
+        avg(length(review.review_text)) as avg_review_length,
         min(date_diff('weeks', review.review_time, labels.timestamp)) as last_review_weeks_ago,
         arg_max(review.summary, review.review_time) as last_review_summary_text,
         arg_max(product_feats.title, review.review_time) as last_reviewed_product_title,
