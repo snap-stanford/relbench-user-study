@@ -64,12 +64,13 @@ TASK_PARAMS = {
     },
     'rel-amazon-product-churn': {
         'dir': 'amazon/product_churn',
-        'target_col': '',
-        'table_prefix': '',
-        'identifier_cols': [],
+        'target_col': 'churn',
+        'table_prefix': 'product_churn',
+        'identifier_cols': ['product_id', 'timestamp'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
+    # TODO
     'rel-amazon-product-ltv': {
         'dir': 'amazon/product_ltv',
         'target_col': '',
