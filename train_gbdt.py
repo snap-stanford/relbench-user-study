@@ -63,7 +63,7 @@ TASK_PARAMS = {
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
     'rel-amazon-product-churn': {
-        'dir': 'amazon/product_churn',
+        'dir': 'amazon/product-churn',
         'target_col': 'churn',
         'table_prefix': 'product_churn',
         'identifier_cols': ['product_id', 'timestamp'],
