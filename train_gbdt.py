@@ -16,7 +16,7 @@ from inferred_stypes import task_to_stypes
 SEED = 42
 DATASET_TO_DB = {
     'rel-stackex': 'stack_exchange/stackex.db',
-    'rel-amazon': 'amazon/amazon_old.db'  # TODO change
+    'rel-amazon': 'amazon/amazon.db'
 }
 TASK_PARAMS = {
     'rel-stackex-engage': {
@@ -79,7 +79,7 @@ TASK_PARAMS = {
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
 }
-NUM_TRIALS = 1  # TODO change
+NUM_TRIALS = 10
 
 
 def render_jinja_sql(query: str, context: dict) -> str:
@@ -131,6 +131,7 @@ if __name__ == '__main__':
     train_df = conn.sql(f'select * from {task_params["table_prefix"]}_train_feats').df()
     val_df = conn.sql(f'select * from {task_params["table_prefix"]}_val_feats').df()
     test_df = conn.sql(f'select * from {task_params["table_prefix"]}_test_feats').df()
+    conn.close()
     col_to_stype = task_to_stypes[args.task]
     drop_cols = task_params['identifier_cols'] + args.drop_cols
     train_df = train_df.drop(args.drop_cols, axis=1)
@@ -171,12 +172,12 @@ if __name__ == '__main__':
     task = dset.get_task(args.task, process=True)
     print()
     pred = gbdt.predict(tf_test=val_tf).numpy()
-    assert len(task.val_table.df) == len(val_df), 'Val: feature df does not match lable df!'
+    assert len(task.val_table.df) == len(val_df), 'Val: feature df does not match label df!'
     pred = map_preds(val_df, task.val_table.df, task_params['identifier_cols'], pred)
     print(f"Val: {task.evaluate(pred, task.val_table)}")
     print()
     test_tf = train_dset.convert_to_tensor_frame(test_df)
-    assert len(task.test_table.df) == len(test_df), 'Test: feature df does not match lable df!'
+    assert len(task.test_table.df) == len(test_df), 'Test: feature df does not match label df!'
     pred = gbdt.predict(tf_test=test_tf).numpy()
     pred = map_preds(test_df, task.test_table.df, task_params['identifier_cols'], pred)
-    print(f"Test: {task.evaluate(pred, task.test_table)}")
+    print(f"Test: {task.evaluate(pred)}")
