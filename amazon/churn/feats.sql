@@ -1,7 +1,11 @@
 create or replace table churn_{{ set }}_feats as -- noqa
 
 with labels as (
-    select * from churn_train -- noqa
+    {% if (set == 'train') and (subsample > 0) %} -- noqa
+    select * from churn_{{ set }} using sample {{ subsample }} -- noqa
+    {% else %}
+    select * from churn_{{ set }} -- noqa
+    {% endif %}
 ),
 
 timestamps as (

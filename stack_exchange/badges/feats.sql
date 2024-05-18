@@ -1,7 +1,11 @@
 create or replace table badges_{{ set }}_feats as -- noqa
 
 with labels as (
+    {% if (set == 'train') and (subsample > 0) %} -- noqa
+    select * from badges_{{ set }} using sample {{ subsample }} -- noqa
+    {% else %}
     select * from badges_{{ set }} -- noqa
+    {% endif %}
 ),
 
 badge_freqs as (
@@ -14,7 +18,7 @@ badge_freqs as (
 
 badge_feats_deagged as (
     select
-        labels.UserId as user_id,
+        labels.UserId,
         labels.timestamp,
         badges.Id,
         case
@@ -43,7 +47,7 @@ badge_feats_deagged as (
 
 badge_feats as (
     select
-        user_id,
+        UserId,
         timestamp,
         coalesce(count(distinct Id), 0) as num_badges,
         coalesce(sum(rarity), 0) as badge_score,
@@ -57,12 +61,12 @@ badge_feats as (
         avg(weeks_since_prev_badge) as avg_weeks_bw_badges,
         coalesce(sum(smoothed_weight), 0) as badge_momentum
     from badge_feats_deagged
-    group by user_id, timestamp
+    group by UserId, timestamp
 ),
 
 user_feats as (
     select
-        labels.UserId as user_id,
+        labels.UserId,
         labels.timestamp,
         date_diff('month', users.CreationDate, labels.timestamp) as months_since_account_creation
     from labels
@@ -72,7 +76,7 @@ user_feats as (
 
 comment_aggs_by_user as (
     select
-        labels.UserId as user_id,
+        labels.UserId,
         labels.timestamp,
         min(date_diff('week', comments.CreationDate, labels.timestamp)) as weeks_since_last_comment,
         count(distinct comments.Id) as num_comments,
@@ -89,7 +93,7 @@ comment_aggs_by_user as (
 -- A row per (time-censored) post per user, timestamp tuple.
 post_labels as (
     select
-        labels.UserId as user_id,
+        labels.UserId,
         labels.timestamp,
         posts.Id as post_id
     from labels
@@ -101,7 +105,7 @@ post_labels as (
 
 vote_aggs as (
     select
-        post_labels.user_id,
+        post_labels.UserId,
         post_labels.timestamp,
         post_labels.post_id,
         count(case when votes.VoteTypeId in (1, 2, 5, 8, 16) then 1 end) as num_positive_votes,
@@ -117,7 +121,7 @@ vote_aggs as (
 comment_aggs_by_post as (
     select
         post_labels.post_id,
-        post_labels.user_id,
+        post_labels.UserId,
         post_labels.timestamp,
         count(distinct comments.Id) as num_comments,
         avg(coalesce(badge_feats.badge_score, 0)) as avg_badge_score
@@ -128,7 +132,7 @@ comment_aggs_by_post as (
             and post_labels.timestamp > comments.CreationDate
     left join badge_feats
         on
-            comments.UserId = badge_feats.user_id
+            comments.UserId = badge_feats.UserId
             and post_labels.timestamp = badge_feats.timestamp
     group by all
 ),
@@ -136,11 +140,11 @@ comment_aggs_by_post as (
 post_feats_deagged as (
     select
         post_labels.post_id,
-        post_labels.user_id,
+        post_labels.UserId,
         post_labels.timestamp,
         posts.CreationDate as creation_date,
         row_number() over (
-            partition by post_labels.user_id, post_labels.timestamp, posts.PostTypeId
+            partition by post_labels.UserId, post_labels.timestamp, posts.PostTypeId
             order by posts.CreationDate desc
         ) as post_rank,
         posts.PostTypeId as post_type,
@@ -163,12 +167,12 @@ post_feats_deagged as (
     left join vote_aggs
         on
             post_labels.post_id = vote_aggs.post_id
-            and post_labels.user_id = vote_aggs.user_id
+            and post_labels.UserId = vote_aggs.UserId
             and post_labels.timestamp = vote_aggs.timestamp
     left join comment_aggs_by_post
         on
             post_labels.post_id = comment_aggs_by_post.post_id
-            and post_labels.user_id = comment_aggs_by_post.user_id
+            and post_labels.UserId = comment_aggs_by_post.UserId
             and post_labels.timestamp = comment_aggs_by_post.timestamp
 ),
 
@@ -194,7 +198,7 @@ last_answer_feats as (
 
 question_feats_last_yr as (
     select
-        user_id,
+        UserId,
         timestamp,
         count(*) as num_questions_last_yr,
         avg(days_since_last_post) as avg_days_since_last_post_q,
@@ -213,7 +217,7 @@ question_feats_last_yr as (
 
 answer_feats_last_yr as (
     select
-        user_id,
+        UserId,
         timestamp,
         count(*) as num_answers_last_yr,
         avg(days_since_last_post) as avg_days_since_last_post_a,
@@ -232,7 +236,7 @@ answer_feats_last_yr as (
 -- Final feature set
 select
     -- labels
-    labels.UserId as user_id,
+    labels.UserId,
     labels.timestamp,
     {% if set != 'test' +%} -- noqa
         labels.WillGetBadge,
@@ -288,29 +292,29 @@ select
 from labels
 left join user_feats
     on
-        labels.UserId = user_feats.user_id
+        labels.UserId = user_feats.UserId
         and labels.timestamp = user_feats.timestamp
 left join badge_feats
     on
-        labels.UserId = badge_feats.user_id
+        labels.UserId = badge_feats.UserId
         and labels.timestamp = badge_feats.timestamp
 left join comment_aggs_by_user
     on
-        labels.UserId = comment_aggs_by_user.user_id
+        labels.UserId = comment_aggs_by_user.UserId
         and labels.timestamp = comment_aggs_by_user.timestamp
 left join last_question_feats
     on
-        labels.UserId = last_question_feats.user_id
+        labels.UserId = last_question_feats.UserId
         and labels.timestamp = last_question_feats.timestamp
 left join last_answer_feats
     on
-        labels.UserId = last_answer_feats.user_id
+        labels.UserId = last_answer_feats.UserId
         and labels.timestamp = last_answer_feats.timestamp
 left join question_feats_last_yr
     on
-        labels.UserId = question_feats_last_yr.user_id
+        labels.UserId = question_feats_last_yr.UserId
         and labels.timestamp = question_feats_last_yr.timestamp
 left join answer_feats_last_yr
     on
-        labels.UserId = answer_feats_last_yr.user_id
+        labels.UserId = answer_feats_last_yr.UserId
         and labels.timestamp = answer_feats_last_yr.timestamp;

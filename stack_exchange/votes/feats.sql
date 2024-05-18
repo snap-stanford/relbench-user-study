@@ -5,7 +5,11 @@ with labels as (
     --     timestamp
     --     PostId
     --     popularity
+    {% if (set == 'train') and (subsample > 0) %} -- noqa
+    select * from votes_{{ set }} using sample {{ subsample }} -- noqa
+    {% else %}
     select * from votes_{{ set }} -- noqa
+    {% endif %}
 ),
 
 post_attrs_at_creation as (
@@ -94,7 +98,7 @@ num_votes as (
 
 vote_stats_first_month as (
     select
-        votes.PostId as post_id,
+        votes.PostId,
         count(*) as num_votes
     from votes
     left join posts
@@ -102,18 +106,18 @@ vote_stats_first_month as (
     where
         votes.VoteTypeId = 2  -- upvotes
         and date_diff('day', posts.CreationDate, votes.CreationDate) <= 30
-    group by post_id
+    group by votes.PostId
 ),
 
 comment_stats_first_month as (
     select
-        comments.PostId as post_id,
+        comments.PostId,
         count(*) as num_comments
     from comments
     left join posts
         on comments.PostId = posts.Id
     where date_diff('day', posts.CreationDate, comments.CreationDate) <= 30
-    group by post_id
+    group by comments.PostId
 ),
 
 user_timestamp as (
@@ -161,9 +165,9 @@ owner_feats_by_timestamp as (
             user_timestamp.user_id = censored_posts.OwnerUserId
             and date_diff('day', censored_posts.CreationDate, user_timestamp.timestamp) > 30
     left join vote_stats_first_month
-        on censored_posts.Id = vote_stats_first_month.post_id
+        on censored_posts.Id = vote_stats_first_month.PostId
     left join comment_stats_first_month
-        on censored_posts.Id = comment_stats_first_month.post_id
+        on censored_posts.Id = comment_stats_first_month.PostId
     group by all
 ),
 
@@ -216,7 +220,7 @@ post_feats as (
 
 -- Final Feature Set
 select
-    labels.PostId as post_id,
+    labels.PostId,
     labels.timestamp,
     {% if set != 'test' +%} -- noqa
         labels.popularity,
