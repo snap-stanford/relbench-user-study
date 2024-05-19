@@ -4,7 +4,6 @@ import numpy as np
 import time
 
 import duckdb
-from jinja2 import Template
 from relbench.datasets import get_dataset
 from torch_frame import TaskType
 from torch_frame.gbdt import LightGBM, XGBoost
@@ -12,6 +11,7 @@ from torch_frame.data import Dataset
 from torch_frame.typing import Metric
 
 from inferred_stypes import task_to_stypes
+import utils
 
 SEED = 42
 DATASET_TO_DB = {
@@ -81,10 +81,6 @@ TASK_PARAMS = {
 NUM_TRIALS = 10
 
 
-def render_jinja_sql(query: str, context: dict) -> str:
-    return Template(query).render(context)
-
-
 def map_preds(feats_df, labels, identifier_cols, preds):
     """ Corrects shuffling that may have occurred during feature generation. """
     idx_map = {
@@ -121,7 +117,7 @@ if __name__ == '__main__':
         # create train, val and test features
         for s in ['train', 'val', 'test']:
             print(f'Creating {s} table')
-            query = render_jinja_sql(template, dict(set=s, subsample=args.subsample))
+            query = utils.render_jinja_sql(template, dict(set=s, subsample=args.subsample))
             conn.sql(query)
             print(f'{s} table created')
         print(f'Features generated in {time.time() - start:,.0f} seconds.')

@@ -21,10 +21,10 @@ and a notebook which uses those features to train a LightGBM model and evaluate 
 ## Setup
 
 Install dependencies (TODO add reqs.txt or pyproject.toml). Then setup a local DuckDB instance of
-the dataset by runnig:
+the dataset by runnig (eg):
 
 ```shell
-python -c "import utils; utils.db_setup("local_db_name.db");"
+python -c "import utils; utils.db_setup("rel-amazon", "amazon/amazon.db");"
 ```
 
 Once you've set up a local DuckDB instance you should be able to run all the notebooks and any
