@@ -1,6 +1,6 @@
 create or replace table product_churn_{{ set }}_feats as -- noqa
 
-with labels as (
+with labels as materialized (
     {% if (set == 'train') and (subsample > 0) %} -- noqa
     select * from product_churn_{{ set }} using sample {{ subsample }} -- noqa
     {% else %}

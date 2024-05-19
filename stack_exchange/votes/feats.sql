@@ -1,6 +1,6 @@
 create or replace table votes_{{ set }}_feats as -- noqa
 
-with labels as (
+with labels as materialized (
     -- Schema:
     --     timestamp
     --     PostId
