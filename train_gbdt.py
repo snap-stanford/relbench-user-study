@@ -69,14 +69,13 @@ TASK_PARAMS = {
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
-    # TODO
     'rel-amazon-product-ltv': {
         'dir': 'amazon/product_ltv',
-        'target_col': '',
-        'table_prefix': '',
-        'identifier_cols': [],
-        'tune_metric': Metric.ROCAUC,
-        'task_type': TaskType.BINARY_CLASSIFICATION,
+        'target_col': 'ltv',
+        'table_prefix': 'product_ltv',
+        'identifier_cols': ['product_id', 'timestamp'],
+        'tune_metric': Metric.MAE,
+        'task_type': TaskType.REGRESSION,
     },
 }
 NUM_TRIALS = 10
