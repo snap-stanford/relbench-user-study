@@ -70,7 +70,7 @@ TASK_PARAMS = {
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
     'rel-amazon-product-ltv': {
-        'dir': 'amazon/product_ltv',
+        'dir': 'amazon/product-ltv',
         'target_col': 'ltv',
         'table_prefix': 'product_ltv',
         'identifier_cols': ['product_id', 'timestamp'],
