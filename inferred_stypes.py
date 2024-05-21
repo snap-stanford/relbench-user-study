@@ -136,6 +136,32 @@ task_to_stypes = {
         'avg_owner_answer_comments_first_month': stype.numerical
     },
 
+    'rel-stackex-votes-binary': {
+        'PostId': stype.numerical,
+        'timestamp': stype.timestamp,
+        'popularity': stype.categorical,
+        'post_type': stype.categorical,
+        'post_age_weeks': stype.numerical,
+        'title_length': stype.numerical,
+        'body_length': stype.numerical,
+        'num_tags': stype.numerical,
+        'user_age_months': stype.numerical,
+        'post_ordinal': stype.numerical,
+        'num_votes': stype.numerical,
+        'closed_weeks_ago': stype.numerical,
+        'reopened_weeks_ago': stype.numerical,
+        'deleted_weeks_ago': stype.numerical,
+        'undeleted_weeks_ago': stype.numerical,
+        'locked_weeks_ago': stype.numerical,
+        'unlocked_weeks_ago': stype.numerical,
+        'tweeted_weeks_ago': stype.numerical,
+        'bumped_weeks_ago': stype.numerical,
+        'avg_owner_question_upvotes_first_month': stype.numerical,
+        'avg_owner_question_comments_first_month': stype.numerical,
+        'avg_owner_answer_upvotes_first_month': stype.numerical,
+        'avg_owner_answer_comments_first_month': stype.numerical
+    },
+
     'rel-amazon-churn': {
         'customer_id': stype.numerical,
         'timestamp': stype.timestamp,

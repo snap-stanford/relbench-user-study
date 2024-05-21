@@ -34,7 +34,6 @@ TASK_PARAMS = {
         'identifier_cols': ['UserId', 'timestamp'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
-
     },
     'rel-stackex-votes': {
         'dir': 'stack_exchange/votes',
@@ -43,7 +42,14 @@ TASK_PARAMS = {
         'identifier_cols': ['PostId', 'timestamp'],
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
-
+    },
+    'rel-stackex-votes-binary': {
+        'dir': 'stack_exchange/votes-binary',
+        'target_col': 'popularity',
+        'table_prefix': 'votes_binary',
+        'identifier_cols': ['PostId', 'timestamp'],
+        'tune_metric': Metric.ROCAUC,
+        'task_type': TaskType.BINARY_CLASSIFICATION,
     },
     'rel-amazon-churn': {
         'dir': 'amazon/churn',
