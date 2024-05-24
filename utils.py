@@ -92,7 +92,7 @@ def feature_summary_df(df: pd.DataFrame, y_col: str, classification: bool = True
     )
     return (
         res
-        .sort_values(by=res['Label Corr.'].abs(), ascending=False)
+        .sort_values(by='Label MI', ascending=False)
         .style
         .format({'Label Corr.': '{:.3f}', 'Label MI': '{:.3f}', 'NaN %': '{:.1%}'})
     )
