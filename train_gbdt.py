@@ -16,7 +16,8 @@ import utils
 SEED = 42
 DATASET_TO_DB = {
     'rel-stackex': 'stack_exchange/stackex.db',
-    'rel-amazon': 'amazon/amazon.db'
+    'rel-amazon': 'amazon/amazon.db',
+    'rel-hm': 'hm/hm.db',
 }
 TASK_PARAMS = {
     'rel-stackex-engage': {
@@ -76,6 +77,22 @@ TASK_PARAMS = {
         'identifier_cols': ['product_id', 'timestamp'],
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
+    },
+    'rel-hm-sales': {
+        'dir': 'hm/sales',
+        'target_col': 'sales',
+        'table_prefix': 'sales',
+        'identifier_cols': ['article_id', 'timestamp'],
+        'tune_metric': Metric.MAE,
+        'task_type': TaskType.REGRESSION,
+    },
+    'rel-hm-churn': {
+        'dir': 'hm/churn',
+        'target_col': 'churn',
+        'table_prefix': 'churn',
+        'identifier_cols': ['customer_id', 'timestamp'],
+        'tune_metric': Metric.ROCAUC,
+        'task_type': TaskType.BINARY_CLASSIFICATION,
     },
 }
 NUM_TRIALS = 10
