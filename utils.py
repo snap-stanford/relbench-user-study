@@ -52,10 +52,12 @@ def render_jinja_sql(query: str, context: dict) -> str:
     return Template(query).render(context)
 
 
-# TODO test
-def validate_feature_tables(db_filename: str, task: str):
+def validate_feature_tables(
+    task: str, conn: duckdb.DuckDBPyConnection = None, db_filename: str = None
+):
     task = task.replace('-', '_')
-    conn = duckdb.connect(db_filename)
+    if conn is None:
+        conn = duckdb.connect(db_filename)
     for s in ['train', 'val', 'test']:
         table_name = f'{task}_{s}'
         print(f'Validating {s}')
@@ -65,12 +67,11 @@ def validate_feature_tables(db_filename: str, task: str):
         print(f'{s} feats size: {len(feats):,} x {len(feats.columns):,}')
         print()
         # validate feats \subset labels
-        joined = labels.join(feats, how='left', on=labels.columns.tolist(), rsuffix='_r')
-        misses = joined[[f'{x}_r' for x in labels.columns.tolist()]].isna()
-        if misses.any():
-            print('Some samples are missing from feats table:')
-            print(labels[misses.any(axis=1)][:5])
-    conn.close()
+        joined = labels.merge(feats, how='inner', on=labels.columns.tolist(), suffixes=('', '_r'))
+        if (diff := len(labels) - len(joined)) != 0:
+            print(f'{diff:,} samples are missing from feats table')
+    if db_filename is not None:
+        conn.close()
 
 
 def feature_summary_df(df: pd.DataFrame, y_col: str, classification: bool = True):
