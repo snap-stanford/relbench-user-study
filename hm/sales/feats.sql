@@ -52,10 +52,10 @@ txn_window_fns as materialized (
                 and labels.timestamp - interval '{{ w }} weeks' <= t.t_dat
         left join customer
             on t.customer_id = customer.customer_id
-        asof join txn_window_fns
+        asof left join txn_window_fns
             on
                 t.customer_id = txn_window_fns.customer_id
-                and labels.timestamp >= txn_window_fns.t_dat
+                and labels.timestamp > txn_window_fns.t_dat
         group by labels.article_id, labels.timestamp
     ){% if not loop.last %},{% endif %}
 {% endfor %}
