@@ -58,6 +58,7 @@ def validate_feature_tables(
     task = task.replace('-', '_')
     if conn is None:
         conn = duckdb.connect(db_filename)
+    error_count = 0
     for s in ['train', 'val', 'test']:
         table_name = f'{task}_{s}'
         print(f'Validating {s}')
@@ -65,11 +66,16 @@ def validate_feature_tables(
         feats = conn.sql(f'select * from {table_name}_feats').df()
         print(f'{s} labels size: {len(labels):,} x {len(labels.columns):,}')
         print(f'{s} feats size: {len(feats):,} x {len(feats.columns):,}')
-        print()
         # validate feats \subset labels
         joined = labels.merge(feats, how='inner', on=labels.columns.tolist(), suffixes=('', '_r'))
         if (diff := len(labels) - len(joined)) != 0:
-            print(f'{diff:,} samples are missing from feats table')
+            print(f'⚠️ {diff:,} samples are missing from feats table!')
+            error_count += 1
+        print()
+    if error_count == 0:
+        print('✅ All tables are valid!')
+    else:
+        print(f'❌ {error_count} errors found!')
     if db_filename is not None:
         conn.close()
 
