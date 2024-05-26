@@ -94,6 +94,30 @@ TASK_PARAMS = {
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
+    'rel-f1-position': {
+        'dir': 'f1/position',
+        'target_col': 'position',
+        'table_prefix': 'position',
+        'identifier_cols': ['driverId', 'date'],
+        'tune_metric': Metric.MAE,
+        'task_type': TaskType.REGRESSION,
+    },
+    'rel-f1-dnf': {
+        'dir': 'f1/dnf',
+        'target_col': 'did_not_finish',
+        'table_prefix': 'dnf',
+        'identifier_cols': ['driverId', 'date'],
+        'tune_metric': Metric.ROCAUC,
+        'task_type': TaskType.BINARY_CLASSIFICATION,
+    },
+    'rel-f1-qualifying': {
+        'dir': 'f1/qualifying',
+        'target_col': 'qualifying',
+        'table_prefix': 'qualifying',
+        'identifier_cols': ['driverId', 'date'],
+        'tune_metric': Metric.ROCAUC,
+        'task_type': TaskType.BINARY_CLASSIFICATION,
+    },
 }
 NUM_TRIALS = 10
 
