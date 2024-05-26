@@ -19,6 +19,12 @@ DATASET_INFO = {
         'tables': ['article', 'customer', 'transactions'],
         'tasks': ['churn', 'sales'],
     },
+
+    'rel-f1': {
+        'tables': ['races', 'circuits', 'drivers', 'results', 'standings', 'constructors',
+                   'constructor_results', 'constructor_standings', 'qualifying'],
+        'tasks': ['position', 'dnf', 'qualifying']
+    }
 }
 
 
