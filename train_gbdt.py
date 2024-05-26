@@ -18,6 +18,7 @@ DATASET_TO_DB = {
     'rel-stackex': 'stack_exchange/stackex.db',
     'rel-amazon': 'amazon/amazon.db',
     'rel-hm': 'hm/hm.db',
+    'rel-f1': 'f1/f1.db',
 }
 TASK_PARAMS = {
     'rel-stackex-engage': {
