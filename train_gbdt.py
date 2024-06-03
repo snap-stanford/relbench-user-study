@@ -69,6 +69,14 @@ TASK_PARAMS = {
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
     },
+    'rel-amazon-ltv-binary': {
+        'dir': 'amazon/ltv-binary',
+        'target_col': 'ltv',
+        'table_prefix': 'ltv',
+        'identifier_cols': ['customer_id', 'timestamp'],
+        'tune_metric': Metric.ROCAUC,
+        'task_type': TaskType.BINARY_CLASSIFICATION,
+    },
     'rel-amazon-product-churn': {
         'dir': 'amazon/product-churn',
         'target_col': 'churn',
