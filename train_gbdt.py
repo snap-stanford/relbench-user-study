@@ -4,7 +4,6 @@ import numpy as np
 import time
 
 import duckdb
-from jinja2 import Template
 from relbench.datasets import get_dataset
 from torch_frame import TaskType
 from torch_frame.gbdt import LightGBM, XGBoost
@@ -12,11 +11,14 @@ from torch_frame.data import Dataset
 from torch_frame.typing import Metric
 
 from inferred_stypes import task_to_stypes
+import utils
 
 SEED = 42
 DATASET_TO_DB = {
     'rel-stackex': 'stack_exchange/stackex.db',
-    'rel-amazon': 'amazon/amazon.db'
+    'rel-amazon': 'amazon/amazon.db',
+    'rel-hm': 'hm/hm.db',
+    'rel-f1': 'f1/f1.db',
 }
 TASK_PARAMS = {
     'rel-stackex-engage': {
@@ -83,12 +85,48 @@ TASK_PARAMS = {
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
     },
+    'rel-hm-sales': {
+        'dir': 'hm/sales',
+        'target_col': 'sales',
+        'table_prefix': 'sales',
+        'identifier_cols': ['article_id', 'timestamp'],
+        'tune_metric': Metric.MAE,
+        'task_type': TaskType.REGRESSION,
+    },
+    'rel-hm-churn': {
+        'dir': 'hm/churn',
+        'target_col': 'churn',
+        'table_prefix': 'churn',
+        'identifier_cols': ['customer_id', 'timestamp'],
+        'tune_metric': Metric.ROCAUC,
+        'task_type': TaskType.BINARY_CLASSIFICATION,
+    },
+    'rel-f1-position': {
+        'dir': 'f1/position',
+        'target_col': 'position',
+        'table_prefix': 'position',
+        'identifier_cols': ['driverId', 'date'],
+        'tune_metric': Metric.MAE,
+        'task_type': TaskType.REGRESSION,
+    },
+    'rel-f1-dnf': {
+        'dir': 'f1/dnf',
+        'target_col': 'did_not_finish',
+        'table_prefix': 'dnf',
+        'identifier_cols': ['driverId', 'date'],
+        'tune_metric': Metric.ROCAUC,
+        'task_type': TaskType.BINARY_CLASSIFICATION,
+    },
+    'rel-f1-qualifying': {
+        'dir': 'f1/qualifying',
+        'target_col': 'qualifying',
+        'table_prefix': 'qualifying',
+        'identifier_cols': ['driverId', 'date'],
+        'tune_metric': Metric.ROCAUC,
+        'task_type': TaskType.BINARY_CLASSIFICATION,
+    },
 }
 NUM_TRIALS = 10
-
-
-def render_jinja_sql(query: str, context: dict) -> str:
-    return Template(query).render(context)
 
 
 def map_preds(feats_df, labels, identifier_cols, preds):
@@ -127,7 +165,7 @@ if __name__ == '__main__':
         # create train, val and test features
         for s in ['train', 'val', 'test']:
             print(f'Creating {s} table')
-            query = render_jinja_sql(template, dict(set=s, subsample=args.subsample))
+            query = utils.render_jinja_sql(template, dict(set=s, subsample=args.subsample))
             conn.sql(query)
             print(f'{s} table created')
         print(f'Features generated in {time.time() - start:,.0f} seconds.')

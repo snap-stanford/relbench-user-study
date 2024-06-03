@@ -1,8 +1,10 @@
 *.db
 *.db.wal
+*.db.tmp
 __pycache__/
 .vscode/
 relbench-data-exploration-and-instructions.ipynb
 .DS_Store
 data/
 .ipynb_checkpoints/
+models/
