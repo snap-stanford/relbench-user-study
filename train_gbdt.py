@@ -72,7 +72,7 @@ TASK_PARAMS = {
     'rel-amazon-ltv-binary': {
         'dir': 'amazon/ltv-binary',
         'target_col': 'ltv',
-        'table_prefix': 'ltv',
+        'table_prefix': 'ltv_binary',
         'identifier_cols': ['customer_id', 'timestamp'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
