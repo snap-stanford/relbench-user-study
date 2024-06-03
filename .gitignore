@@ -7,3 +7,4 @@ relbench-data-exploration-and-instructions.ipynb
 .DS_Store
 data/
 .ipynb_checkpoints/
+models/
