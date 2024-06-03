@@ -117,6 +117,14 @@ TASK_PARAMS = {
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
     },
+    'rel-f1-position-binary': {
+        'dir': 'f1/position-binary',
+        'target_col': 'position',
+        'table_prefix': 'position_binary',
+        'identifier_cols': ['driverId', 'date'],
+        'tune_metric': Metric.ROCAUC,
+        'task_type': TaskType.BINARY_CLASSIFICATION,
+    },
     'rel-f1-dnf': {
         'dir': 'f1/dnf',
         'target_col': 'did_not_finish',
