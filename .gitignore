@@ -8,3 +8,5 @@ relbench-data-exploration-and-instructions.ipynb
 data/
 .ipynb_checkpoints/
 models/
+logs/
+
