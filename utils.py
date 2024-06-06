@@ -24,6 +24,14 @@ DATASET_INFO = {
         'tables': ['races', 'circuits', 'drivers', 'results', 'standings', 'constructors',
                    'constructor_results', 'constructor_standings', 'qualifying'],
         'tasks': ['position', 'dnf', 'qualifying']
+    },
+
+    'rel-trial': {
+        'tables': ['studies', 'outcomes', 'outcome_analyses', 'drop_withdrawals',
+                   'reported_event_totals', 'designs', 'eligibilities', 'interventions',
+                   'conditions', 'facilities', 'sponsors', 'interventions_studies',
+                   'conditions_studies', 'facilities_studies', 'sponsors_studies'],
+        'tasks': ['outcome', 'adverse', 'site']
     }
 }
 
