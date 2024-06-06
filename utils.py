@@ -7,7 +7,7 @@ from sklearn.feature_selection import mutual_info_classif, mutual_info_regressio
 DATASET_INFO = {
     'rel-stack': {
         'tables': ['users', 'posts', 'votes', 'badges', 'comments', 'postHistory'],
-        'tasks': ['engage', 'badges', 'votes']
+        'tasks': ['user-engagement', 'user-badge', 'post-votes']
     },
 
     'rel-amazon': {
