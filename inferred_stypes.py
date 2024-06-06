@@ -136,7 +136,7 @@ task_to_stypes = {
         'avg_owner_answer_comments_first_month': stype.numerical
     },
 
-    'rel-amazon-churn': {
+    'rel-amazon-user-churn': {
         'customer_id': stype.numerical,
         'timestamp': stype.timestamp,
         'churn': stype.categorical,
@@ -171,7 +171,7 @@ task_to_stypes = {
         'avg_user_bias_trend': stype.numerical
     },
 
-    'rel-amazon-product-churn': {
+    'rel-amazon-item-churn': {
         'product_id': stype.numerical,
         'timestamp': stype.timestamp,
         'churn': stype.categorical,
@@ -205,7 +205,7 @@ task_to_stypes = {
         'product_bias_trend': stype.numerical
     },
 
-    'rel-amazon-ltv': {
+    'rel-amazon-user-ltv': {
         'customer_id': stype.numerical,
         'timestamp': stype.timestamp,
         'ltv': stype.numerical,
@@ -293,7 +293,7 @@ task_to_stypes = {
         'reviewed_product_modal_category': stype.categorical
     },
 
-    'rel-amazon-product-ltv': {
+    'rel-amazon-item-ltv': {
         'product_id': stype.numerical,
         'timestamp': stype.timestamp,
         'price': stype.numerical,

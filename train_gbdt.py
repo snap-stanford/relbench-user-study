@@ -47,7 +47,7 @@ TASK_PARAMS = {
         'task_type': TaskType.REGRESSION,
 
     },
-    'rel-amazon-churn': {
+    'rel-amazon-user-churn': {
         'dir': 'amazon/churn',
         'target_col': 'churn',
         'table_prefix': 'churn',
@@ -55,7 +55,7 @@ TASK_PARAMS = {
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
-    'rel-amazon-ltv': {
+    'rel-amazon-user-ltv': {
         'dir': 'amazon/ltv',
         'target_col': 'ltv',
         'table_prefix': 'ltv',
@@ -63,7 +63,7 @@ TASK_PARAMS = {
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
     },
-    'rel-amazon-product-churn': {
+    'rel-amazon-item-churn': {
         'dir': 'amazon/product-churn',
         'target_col': 'churn',
         'table_prefix': 'product_churn',
@@ -71,7 +71,7 @@ TASK_PARAMS = {
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
-    'rel-amazon-product-ltv': {
+    'rel-amazon-item-ltv': {
         'dir': 'amazon/product-ltv',
         'target_col': 'ltv',
         'table_prefix': 'product_ltv',
