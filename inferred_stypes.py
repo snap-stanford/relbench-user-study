@@ -1,7 +1,7 @@
 from torch_frame import stype
 
 task_to_stypes = {
-    'rel-stackex-engage': {
+    'rel-stack-user-engagement': {
         'OwnerUserId': stype.numerical,
         'timestamp': stype.timestamp,
         'contribution': stype.categorical,
@@ -60,7 +60,7 @@ task_to_stypes = {
         'avg_commenter_badge_score_a': stype.numerical
     },
 
-    'rel-stackex-badges': {
+    'rel-stack-user-badge': {
         'UserId': stype.numerical,
         'timestamp': stype.timestamp,
         'WillGetBadge': stype.categorical,
@@ -110,7 +110,7 @@ task_to_stypes = {
         'avg_commenter_badge_score_a': stype.numerical
     },
 
-    'rel-stackex-votes': {
+    'rel-stack-post-votes': {
         'PostId': stype.numerical,
         'timestamp': stype.timestamp,
         'popularity': stype.numerical,

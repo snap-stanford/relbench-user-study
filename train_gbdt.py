@@ -15,13 +15,13 @@ import utils
 
 SEED = 42
 DATASET_TO_DB = {
-    'rel-stackex': 'stack_exchange/stackex.db',
+    'rel-stack': 'stack_exchange/stackex.db',
     'rel-amazon': 'amazon/amazon.db',
     'rel-hm': 'hm/hm.db',
     'rel-f1': 'f1/f1.db',
 }
 TASK_PARAMS = {
-    'rel-stackex-engage': {
+    'rel-stack-user-engagement': {
         'dir': 'stack_exchange/engage',
         'target_col': 'contribution',
         'table_prefix': 'engage',
@@ -29,7 +29,7 @@ TASK_PARAMS = {
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
-    'rel-stackex-badges': {
+    'rel-stack-user-badge': {
         'dir': 'stack_exchange/badges',
         'target_col': 'WillGetBadge',
         'table_prefix': 'badges',
@@ -38,7 +38,7 @@ TASK_PARAMS = {
         'task_type': TaskType.BINARY_CLASSIFICATION,
 
     },
-    'rel-stackex-votes': {
+    'rel-stack-post-votes': {
         'dir': 'stack_exchange/votes',
         'target_col': 'popularity',
         'table_prefix': 'votes',
