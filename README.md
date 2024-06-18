@@ -1,14 +1,10 @@
-# Relbench User Study
+# RelBench User Study
 
 ## Description
 
 This project aims to conduct a user study for Relbench, a benchmarking tool for relational databases.
 The goal of the study is to benchmark the performance of a classical ML model (LightGBM) with feature
 engineering conducted in SQL by a data scientist.
-
-## Study Design
-
-TODO Write
 
 ## Structure
 
