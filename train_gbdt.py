@@ -79,7 +79,7 @@ TASK_PARAMS = {
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
     },
-    'rel-hm-sales': {
+    'rel-hm-item-sales': {
         'dir': 'hm/sales',
         'target_col': 'sales',
         'table_prefix': 'sales',
@@ -87,7 +87,7 @@ TASK_PARAMS = {
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
     },
-    'rel-hm-churn': {
+    'rel-hm-user-churn': {
         'dir': 'hm/churn',
         'target_col': 'churn',
         'table_prefix': 'churn',

@@ -363,7 +363,7 @@ task_to_stypes = {
         'avg_reviewer_std_rating': stype.numerical
     },
 
-    'rel-hm-sales': {
+    'rel-hm-item-sales': {
         'article_id': stype.numerical,
         'timestamp': stype.timestamp,
         'sales': stype.numerical,
@@ -415,7 +415,7 @@ task_to_stypes = {
         'avg_weeks_since_last_purchase_5_weeks_ago': stype.numerical
     },
 
-    'rel-hm-churn': {
+    'rel-hm-user-churn': {
         'customer_id': stype.numerical,
         'timestamp': stype.timestamp,
         'churn': stype.categorical,
