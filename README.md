@@ -1,27 +1,51 @@
 # RelBench User Study
 
+[![Relbench Website](https://img.shields.io/badge/website-live-brightgreen)](https://relbench.stanford.edu)
+[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40RelBench)](https://twitter.com/RelBench)
+
+[**Website**](https://relbench.stanford.edu) | [**Relbench Repo**](https://github.com/snap-stanford/relbench) | [**Vision Paper**](https://relbench.stanford.edu/paper.pdf) | [**Mailing List**](https://groups.google.com/forum/#!forum/relbench/join)
+
 ## Description
 
-This project aims to conduct a user study for Relbench, a benchmarking tool for relational databases.
-The goal of the study is to benchmark the performance of a classical ML model (LightGBM) with feature
-engineering conducted in SQL by a data scientist.
+This repo hosts the code used in the RelBench User Study.  The goal of the study is to benchmark the
+performance of a classical ML model (LightGBM) with feature engineering carried out in SQL by a data
+scientist. The purpose is to provide a comparison point for the performance Relational Deep Learning
+(RDL) models on the RelBench benchmark.
+
+For details on the user study see section 5 and appendix C of the RelBench Paper.
+
 
 ## Structure
+At the top level there are two noteworthy python files:
+- `traing_gbdt.py`: A script that runs hyperparameter tuning for LightGBM trained on the hand-engineered
+featuers for each task.
+- `utils.py`: A set of utility functions useful throughout the study, most notably a function to set
+up DuckDB instances of each dataset (see below).
 
-The top level directories correspond to datasets in Relbench. Within each dataset you will find a
-dataset-level exploratory data analysis (EDA) notebook, a utils module (which among other things can
-help you setup a DuckDB instance of the dataset) and subdirectories for each task. In turn, each
-task directory contains a `feats.sql` file containing the features engineered by a data scientist,
-and a notebook which uses those features to train a LightGBM model and evaluate its performance.
+In addition, the directories at the top level correspond to datasets in RelBench. Within each dataset
+directory you will find a dataset-level exploratory data analysis (EDA) notebook, and subdirectories
+for each task. In turn, each task directory contains a `feats.sql` file containing the features
+engineered by a data scientist, and a notebook with dataset/model validation code.
 
 ## Setup
 
-Install dependencies (TODO add reqs.txt or pyproject.toml). Then setup a local DuckDB instance of
-the dataset by runnig (eg):
+Install dependencies (`pip install -r requirements.txt`).
+
+For a given dataset (eg: `rel-amazon`), set up a local DuckDB instance by running:
 
 ```shell
-python -c "import utils; utils.db_setup("rel-amazon", "amazon/amazon.db");"
+python -c "import utils; utils.db_setup('rel-amazon', 'amazon/amazon.db');"
 ```
 
 Once you've set up a local DuckDB instance you should be able to run all the notebooks and any
 additional SQL you desire.
+
+
+## Training a LightGBM
+
+Assuming you have set up the DuckDB instance as indicated above, you can train a LightGBM with the
+following command:
+
+```shell
+python train_gdbt.py --dataset rel-amazon --task rel-amazon-churn --generate_feats
+```
