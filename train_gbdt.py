@@ -5,7 +5,7 @@ import time
 
 import duckdb
 from relbench.datasets import get_dataset
-from torch_frame import TaskType
+from torch_frame import TaskType, stype
 from torch_frame.gbdt import LightGBM, XGBoost
 from torch_frame.data import Dataset
 from torch_frame.typing import Metric
@@ -136,8 +136,8 @@ def map_preds(feats_df, labels, identifier_cols, preds):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Argument Parser')
-    parser.add_argument('--dataset', '-d', type=str, help='Path to the dataset')
-    parser.add_argument('--task', '-t', type=str, help='Task to perform')
+    parser.add_argument('--dataset', '-d', type=str, help='Relbench dataset name')
+    parser.add_argument('--task', '-t', type=str, help='Relbench task name')
     parser.add_argument('--booster', '-b', type=str, default='lgbm', help='One of "xgb" or "lgbm"')
     parser.add_argument('--subsample', '-s', type=int, default=0,
                         help=(
@@ -146,7 +146,7 @@ if __name__ == '__main__':
                             'subset. '
                         ))
     parser.add_argument('--generate_feats', action='store_true',
-                        help='Whether to generate features specified in feats.sql')
+                        help='Whether to (re)generate features specified in feats.sql')
     parser.add_argument('--drop_cols', nargs='+', default=[], help='Columns to drop')
     args = parser.parse_args()
     task_params = TASK_PARAMS[args.task]
@@ -178,6 +178,13 @@ if __name__ == '__main__':
         train_df = train_df.sample(args.subsample, replace=False, random_state=SEED)
     print('Materializing torch-frame dataset.')
     start = time.time()
+    # TODO add support for text embeddings
+    for k, v in col_to_stype.items():
+        if v == stype.text_embedded:
+            raise NotImplementedError(
+                'Embeddings for text columns not supported for speed considerations. Either drop'
+                'them with the --drop_cols flag or see relbench/examples for how to use embeddings.'
+            )
     train_dset = Dataset(
         train_df,
         col_to_stype=col_to_stype,
