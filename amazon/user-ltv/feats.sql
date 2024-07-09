@@ -1,10 +1,10 @@
-create or replace table ltv_{{ set }}_feats as -- noqa
+create or replace table user_ltv_{{ set }}_feats as -- noqa
 
 with labels as materialized (
     {% if (set == 'train') and (subsample > 0) %} -- noqa
-    select * from ltv_{{ set }} using sample {{ subsample }} -- noqa
+    select * from user_ltv_{{ set }} using sample {{ subsample }} -- noqa
     {% else %}
-    select * from ltv_{{ set }} -- noqa
+    select * from user_ltv_{{ set }} -- noqa
     {% endif %}
 ),
 

@@ -1,10 +1,10 @@
-create or replace table churn_{{ set }}_feats as -- noqa
+create or replace table user_churn_{{ set }}_feats as -- noqa
 
 with labels as (
     {% if (set == 'train') and (subsample > 0) %} -- noqa
-    select * from churn_{{ set }} using sample {{ subsample }} -- noqa
+    select * from user_churn_{{ set }} using sample {{ subsample }} -- noqa
     {% else %}
-    select * from churn_{{ set }} -- noqa
+    select * from user_churn_{{ set }} -- noqa
     {% endif %}
 ),
 
