@@ -15,33 +15,33 @@ import utils
 
 SEED = 42
 DATASET_TO_DB = {
-    'rel-stack': 'stack_exchange/stackex.db',
+    'rel-stack': 'stack/stack.db',
     'rel-amazon': 'amazon/amazon.db',
     'rel-hm': 'hm/hm.db',
     'rel-f1': 'f1/f1.db',
 }
 TASK_PARAMS = {
     'rel-stack-user-engagement': {
-        'dir': 'stack_exchange/engage',
+        'dir': 'stack/user-engagement',
         'target_col': 'contribution',
-        'table_prefix': 'engage',
+        'table_prefix': 'user_engagement',
         'identifier_cols': ['OwnerUserId', 'timestamp'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
     'rel-stack-user-badge': {
-        'dir': 'stack_exchange/badges',
+        'dir': 'stack/user-badge',
         'target_col': 'WillGetBadge',
-        'table_prefix': 'badges',
+        'table_prefix': 'user_badge',
         'identifier_cols': ['UserId', 'timestamp'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
 
     },
     'rel-stack-post-votes': {
-        'dir': 'stack_exchange/votes',
+        'dir': 'stack/post-votes',
         'target_col': 'popularity',
-        'table_prefix': 'votes',
+        'table_prefix': 'post_votes',
         'identifier_cols': ['PostId', 'timestamp'],
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
