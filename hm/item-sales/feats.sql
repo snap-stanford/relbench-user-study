@@ -1,10 +1,10 @@
-create or replace table sales_{{ set }}_feats as -- noqa
+create or replace table item_sales_{{ set }}_feats as -- noqa
 
 with labels as materialized (
     {% if (set == 'train') and (subsample > 0) %} -- noqa
-    select * from sales_{{ set }} using sample {{ subsample }} -- noqa
+    select * from item_sales_{{ set }} using sample {{ subsample }} -- noqa
     {% else %}
-    select * from sales_{{ set }} -- noqa
+    select * from item_sales_{{ set }} -- noqa
     {% endif %}
 ),
 
