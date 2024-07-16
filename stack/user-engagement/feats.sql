@@ -1,10 +1,10 @@
-create or replace table engage_{{ set }}_feats as -- noqa
+create or replace table user_engagement_{{ set }}_feats as -- noqa
 
 with labels as materialized (
     {% if (set == 'train') and (subsample > 0) %} -- noqa
-    select * from engage_{{ set }} using sample {{ subsample }} -- noqa
+    select * from user_engagement_{{ set }} using sample {{ subsample }} -- noqa
     {% else %}
-    select * from engage_{{ set }} -- noqa
+    select * from user_engagement_{{ set }} -- noqa
     {% endif %}
 ),
 

@@ -1,4 +1,4 @@
-create or replace table votes_{{ set }}_feats as -- noqa
+create or replace table post_votes_{{ set }}_feats as -- noqa
 
 with labels as materialized (
     -- Schema:
@@ -6,9 +6,9 @@ with labels as materialized (
     --     PostId
     --     popularity
     {% if (set == 'train') and (subsample > 0) %} -- noqa
-    select * from votes_{{ set }} using sample {{ subsample }} -- noqa
+    select * from post_votes_{{ set }} using sample {{ subsample }} -- noqa
     {% else %}
-    select * from votes_{{ set }} -- noqa
+    select * from post_votes_{{ set }} -- noqa
     {% endif %}
 ),
 

@@ -1,10 +1,10 @@
-create or replace table badges_{{ set }}_feats as -- noqa
+create or replace table user_badge_{{ set }}_feats as -- noqa
 
 with labels as materialized (
     {% if (set == 'train') and (subsample > 0) %} -- noqa
-    select * from badges_{{ set }} using sample {{ subsample }} -- noqa
+    select * from user_badge_{{ set }} using sample {{ subsample }} -- noqa
     {% else %}
-    select * from badges_{{ set }} -- noqa
+    select * from user_badge_{{ set }} -- noqa
     {% endif %}
 ),
 
