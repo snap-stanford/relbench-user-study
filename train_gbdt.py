@@ -95,26 +95,26 @@ TASK_PARAMS = {
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
-    'rel-f1-position': {
-        'dir': 'f1/position',
+    'rel-f1-driver-position': {
+        'dir': 'f1/driver-position',
         'target_col': 'position',
-        'table_prefix': 'position',
+        'table_prefix': 'driver_position',
         'identifier_cols': ['driverId', 'date'],
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
     },
-    'rel-f1-dnf': {
-        'dir': 'f1/dnf',
+    'rel-f1-driver-dnf': {
+        'dir': 'f1/driver-dnf',
         'target_col': 'did_not_finish',
-        'table_prefix': 'dnf',
+        'table_prefix': 'driver_dnf',
         'identifier_cols': ['driverId', 'date'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
-    'rel-f1-qualifying': {
-        'dir': 'f1/qualifying',
+    'rel-f1-driver-top3': {
+        'dir': 'f1/driver-top3',
         'target_col': 'qualifying',
-        'table_prefix': 'qualifying',
+        'table_prefix': 'driver_top3',
         'identifier_cols': ['driverId', 'date'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
