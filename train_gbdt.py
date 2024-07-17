@@ -220,7 +220,7 @@ if __name__ == '__main__':
     print(f"Val: {task.evaluate(pred, task.get_table("val"))}")
     print()
     test_tf = train_dset.convert_to_tensor_frame(test_df)
-    assert len(task.test_table.df) == len(test_df), 'Test: feature df does not match label df!'
+    assert len(task.get_table("test").df) == len(test_df), 'Test: feature df does not match label df!'
     pred = gbdt.predict(tf_test=test_tf).numpy()
-    pred = map_preds(test_df, task.test_table.df, task_params['identifier_cols'], pred)
+    pred = map_preds(test_df, task.get_table("test").df, task_params['identifier_cols'], pred)
     print(f"Test: {task.evaluate(pred)}")
