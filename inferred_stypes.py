@@ -492,7 +492,7 @@ task_to_stypes = {
         'modal_color_id_5_weeks_ago': stype.categorical
     },
 
-    'rel-f1-position': {
+    'rel-f1-driver-position': {
         'driverId': stype.numerical,
         'date': stype.timestamp,
         'position': stype.numerical,
@@ -548,7 +548,7 @@ task_to_stypes = {
         'upcoming_3_circuit_id': stype.categorical
     },
 
-    'rel-f1-dnf': {
+    'rel-f1-driver-dnf': {
         'driverId': stype.numerical,
         'date': stype.timestamp,
         'did_not_finish': stype.categorical,
@@ -604,7 +604,7 @@ task_to_stypes = {
         'upcoming_3_circuit_id': stype.categorical
     },
 
-    'rel-f1-qualifying': {
+    'rel-f1-driver-top3': {
         'driverId': stype.numerical,
         'date': stype.timestamp,
         'qualifying': stype.categorical,
