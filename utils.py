@@ -48,7 +48,7 @@ def db_setup(dataset_name: str, db_filename: str):
     tasks = DATASET_INFO[dataset_name]['tasks']
     tables = DATASET_INFO[dataset_name]['tables']
     for table_name in tables:
-        exec(f'{table_name} = dataset.db.table_dict["{table_name}"].df')
+        exec(f'{table_name} = dataset.get_db().table_dict["{table_name}"].df')
         conn.sql(f'create table {table_name} as select * from {table_name}')
     for task_name in tasks:
         task = dataset.get_task(f'{dataset_name}-{task_name}', process=True)
