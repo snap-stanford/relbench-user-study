@@ -211,8 +211,8 @@ if __name__ == '__main__':
     print()
 
     print('Evaluating model.')
-    dset = get_dataset(name=args.dataset, process=True)
-    task = dset.get_task(args.task, process=True)
+    dset = get_dataset(name=args.dataset, download=True)
+    task = dset.get_task(args.task, download=True)
     print()
     pred = gbdt.predict(tf_test=val_tf).numpy()
     assert len(task.get_table("val").df) == len(val_df), 'Val: feature df does not match label df!'
