@@ -52,7 +52,7 @@ def db_setup(dataset_name: str, db_filename: str):
         conn.sql(f'create table {table_name} as select * from {table_name}')
     for task_name in tasks:
         task = dataset.get_task(f'{dataset_name}-{task_name}', process=True)
-        train_table = task.train_table.df  # noqa
+        train_table = task.get_table("train").df  # noqa
         val_table = task.val_table.df  # noqa
         test_table = task.test_table.df  # noqa
         task_name = task_name.replace('-', '_')
