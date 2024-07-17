@@ -1,11 +1,11 @@
-create or replace table dnf_{{ set }}_feats as -- noqa
+create or replace table driver_dnf_{{ set }}_feats as -- noqa
 
 with labels as materialized (
     -- driverId, date, dnf
     {% if (set == 'train') and (subsample > 0) %} -- noqa
-    select * from dnf_{{ set }} using sample {{ subsample }} -- noqa
+    select * from driver_dnf_{{ set }} using sample {{ subsample }} -- noqa
     {% else %}
-    select * from dnf_{{ set }} -- noqa
+    select * from driver_dnf_{{ set }} -- noqa
     {% endif %}
 ),
 

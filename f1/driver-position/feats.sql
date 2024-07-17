@@ -1,11 +1,11 @@
-create or replace table position_{{ set }}_feats as -- noqa
+create or replace table driver_position_{{ set }}_feats as -- noqa
 
 with labels as materialized (
     -- driverId, date, position
     {% if (set == 'train') and (subsample > 0) %} -- noqa
-    select * from position_{{ set }} using sample {{ subsample }} -- noqa
+    select * from driver_position_{{ set }} using sample {{ subsample }} -- noqa
     {% else %}
-    select * from position_{{ set }} -- noqa
+    select * from driver_position_{{ set }} -- noqa
     {% endif %}
 ),
 
