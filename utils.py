@@ -1,6 +1,7 @@
 import duckdb
 from jinja2 import Template
 import pandas as pd
+from relbench.datasets import get_dataset
 from relbench.tasks import get_task
 from sklearn.feature_selection import mutual_info_classif, mutual_info_regression
 
@@ -44,6 +45,7 @@ def db_setup(dataset_name: str, db_filename: str):
         db_filename (str): Path to the DuckDB database file.
     """
     conn = duckdb.connect(db_filename)
+    dataset = get_dataset(name=dataset_name, download=True)  # noqa
     tasks = DATASET_INFO[dataset_name]['tasks']
     tables = DATASET_INFO[dataset_name]['tables']
     for table_name in tables:
