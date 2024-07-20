@@ -4,7 +4,7 @@ import numpy as np
 import time
 
 import duckdb
-from relbench.datasets import get_dataset
+from relbench.tasks import get_task
 from torch_frame import TaskType, stype
 from torch_frame.gbdt import LightGBM, XGBoost
 from torch_frame.data import Dataset
@@ -211,8 +211,7 @@ if __name__ == '__main__':
     print()
 
     print('Evaluating model.')
-    dset = get_dataset(name=args.dataset, download=True)
-    task = dset.get_task(args.task, download=True)
+    task = get_task(args.dataset, args.task, download=True)
     print()
     pred = gbdt.predict(tf_test=val_tf).numpy()
     assert len(task.get_table("val").df) == len(val_df), 'Val: feature df does not match label df!'
