@@ -149,7 +149,8 @@ if __name__ == '__main__':
                         help='Whether to (re)generate features specified in feats.sql')
     parser.add_argument('--drop_cols', nargs='+', default=[], help='Columns to drop')
     args = parser.parse_args()
-    task_params = TASK_PARAMS[args.task]
+    full_task_name = f'{args.dataset}-{args.task}'
+    task_params = TASK_PARAMS[full_task_name]
     conn = duckdb.connect(DATASET_TO_DB[args.dataset])
     if args.generate_feats:
         print('Generating features.')
@@ -168,7 +169,7 @@ if __name__ == '__main__':
     val_df = conn.sql(f'select * from {task_params["table_prefix"]}_val_feats').df()
     test_df = conn.sql(f'select * from {task_params["table_prefix"]}_test_feats').df()
     conn.close()
-    col_to_stype = task_to_stypes[args.task]
+    col_to_stype = task_to_stypes[full_task_name]
     drop_cols = task_params['identifier_cols'] + args.drop_cols
     train_df = train_df.drop(args.drop_cols, axis=1)
     val_df = val_df.drop(args.drop_cols, axis=1)
@@ -205,7 +206,7 @@ if __name__ == '__main__':
     start = time.time()
     gbdt.tune(tf_train=train_dset.tensor_frame, tf_val=val_tf, num_trials=NUM_TRIALS)
     print(f'Hparam tuning completed in {time.time() - start:,.0f} seconds.')
-    model_path = os.path.join(task_params['dir'], f'{args.task}_{args.booster}.json')
+    model_path = os.path.join(task_params['dir'], f'{full_task_name}_{args.booster}.json')
     print(f'Saving model to "{model_path}".')
     gbdt.save(model_path)
     print()
