@@ -2,28 +2,37 @@ import duckdb
 from jinja2 import Template
 import pandas as pd
 from relbench.datasets import get_dataset
+from relbench.tasks import get_task
 from sklearn.feature_selection import mutual_info_classif, mutual_info_regression
 
 DATASET_INFO = {
-    'rel-stackex': {
+    'rel-stack': {
         'tables': ['users', 'posts', 'votes', 'badges', 'comments', 'postHistory'],
-        'tasks': ['engage', 'badges', 'votes']
+        'tasks': ['user-engagement', 'user-badge', 'post-votes']
     },
 
     'rel-amazon': {
         'tables': ['review', 'customer', 'product'],
-        'tasks': ['churn', 'ltv', 'product-ltv', 'product-churn']
+        'tasks': ['user-churn', 'user-ltv', 'product-ltv', 'product-churn']
     },
 
     'rel-hm': {
         'tables': ['article', 'customer', 'transactions'],
-        'tasks': ['churn', 'sales'],
+        'tasks': ['user-churn', 'item-sales'],
     },
 
     'rel-f1': {
         'tables': ['races', 'circuits', 'drivers', 'results', 'standings', 'constructors',
                    'constructor_results', 'constructor_standings', 'qualifying'],
-        'tasks': ['position', 'dnf', 'qualifying']
+        'tasks': ['driver-position', 'driver-dnf', 'driver-top3']
+    },
+
+    'rel-trial': {
+        'tables': ['studies', 'outcomes', 'outcome_analyses', 'drop_withdrawals',
+                   'reported_event_totals', 'designs', 'eligibilities', 'interventions',
+                   'conditions', 'facilities', 'sponsors', 'interventions_studies',
+                   'conditions_studies', 'facilities_studies', 'sponsors_studies'],
+        'tasks': ['outcome', 'adverse', 'site']
     }
 }
 
@@ -36,17 +45,17 @@ def db_setup(dataset_name: str, db_filename: str):
         db_filename (str): Path to the DuckDB database file.
     """
     conn = duckdb.connect(db_filename)
-    dataset = get_dataset(name=dataset_name, process=True)
+    dataset = get_dataset(name=dataset_name, download=True)  # noqa
     tasks = DATASET_INFO[dataset_name]['tasks']
     tables = DATASET_INFO[dataset_name]['tables']
     for table_name in tables:
-        exec(f'{table_name} = dataset.db.table_dict["{table_name}"].df')
+        exec(f'{table_name} = dataset.get_db().table_dict["{table_name}"].df')
         conn.sql(f'create table {table_name} as select * from {table_name}')
     for task_name in tasks:
-        task = dataset.get_task(f'{dataset_name}-{task_name}', process=True)
-        train_table = task.train_table.df  # noqa
-        val_table = task.val_table.df  # noqa
-        test_table = task.test_table.df  # noqa
+        task = get_task(dataset_name, task_name, download=True)
+        train_table = task.get_table("train").df  # noqa
+        val_table = task.get_table("val").df  # noqa
+        test_table = task.get_table("test").df  # noqa
         task_name = task_name.replace('-', '_')
         conn.sql(f'create table {task_name}_train as select * from train_table')
         conn.sql(f'create table {task_name}_val as select * from val_table')

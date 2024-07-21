@@ -1,7 +1,7 @@
 from torch_frame import stype
 
 task_to_stypes = {
-    'rel-stackex-engage': {
+    'rel-stack-user-engagement': {
         'OwnerUserId': stype.numerical,
         'timestamp': stype.timestamp,
         'contribution': stype.categorical,
@@ -60,7 +60,7 @@ task_to_stypes = {
         'avg_commenter_badge_score_a': stype.numerical
     },
 
-    'rel-stackex-badges': {
+    'rel-stack-user-badge': {
         'UserId': stype.numerical,
         'timestamp': stype.timestamp,
         'WillGetBadge': stype.categorical,
@@ -110,7 +110,7 @@ task_to_stypes = {
         'avg_commenter_badge_score_a': stype.numerical
     },
 
-    'rel-stackex-votes': {
+    'rel-stack-post-votes': {
         'PostId': stype.numerical,
         'timestamp': stype.timestamp,
         'popularity': stype.numerical,
@@ -136,7 +136,7 @@ task_to_stypes = {
         'avg_owner_answer_comments_first_month': stype.numerical
     },
 
-    'rel-amazon-churn': {
+    'rel-amazon-user-churn': {
         'customer_id': stype.numerical,
         'timestamp': stype.timestamp,
         'churn': stype.categorical,
@@ -171,7 +171,7 @@ task_to_stypes = {
         'avg_user_bias_trend': stype.numerical
     },
 
-    'rel-amazon-product-churn': {
+    'rel-amazon-item-churn': {
         'product_id': stype.numerical,
         'timestamp': stype.timestamp,
         'churn': stype.categorical,
@@ -205,7 +205,7 @@ task_to_stypes = {
         'product_bias_trend': stype.numerical
     },
 
-    'rel-amazon-ltv': {
+    'rel-amazon-user-ltv': {
         'customer_id': stype.numerical,
         'timestamp': stype.timestamp,
         'ltv': stype.numerical,
@@ -293,7 +293,7 @@ task_to_stypes = {
         'reviewed_product_modal_category': stype.categorical
     },
 
-    'rel-amazon-product-ltv': {
+    'rel-amazon-item-ltv': {
         'product_id': stype.numerical,
         'timestamp': stype.timestamp,
         'price': stype.numerical,
@@ -363,7 +363,7 @@ task_to_stypes = {
         'avg_reviewer_std_rating': stype.numerical
     },
 
-    'rel-hm-sales': {
+    'rel-hm-item-sales': {
         'article_id': stype.numerical,
         'timestamp': stype.timestamp,
         'sales': stype.numerical,
@@ -415,7 +415,7 @@ task_to_stypes = {
         'avg_weeks_since_last_purchase_5_weeks_ago': stype.numerical
     },
 
-    'rel-hm-churn': {
+    'rel-hm-user-churn': {
         'customer_id': stype.numerical,
         'timestamp': stype.timestamp,
         'churn': stype.categorical,
@@ -492,7 +492,7 @@ task_to_stypes = {
         'modal_color_id_5_weeks_ago': stype.categorical
     },
 
-    'rel-f1-position': {
+    'rel-f1-driver-position': {
         'driverId': stype.numerical,
         'date': stype.timestamp,
         'position': stype.numerical,
@@ -548,7 +548,7 @@ task_to_stypes = {
         'upcoming_3_circuit_id': stype.categorical
     },
 
-    'rel-f1-dnf': {
+    'rel-f1-driver-dnf': {
         'driverId': stype.numerical,
         'date': stype.timestamp,
         'did_not_finish': stype.categorical,
@@ -604,7 +604,7 @@ task_to_stypes = {
         'upcoming_3_circuit_id': stype.categorical
     },
 
-    'rel-f1-qualifying': {
+    'rel-f1-driver-top3': {
         'driverId': stype.numerical,
         'date': stype.timestamp,
         'qualifying': stype.categorical,

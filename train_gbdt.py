@@ -4,7 +4,7 @@ import numpy as np
 import time
 
 import duckdb
-from relbench.datasets import get_dataset
+from relbench.tasks import get_task
 from torch_frame import TaskType, stype
 from torch_frame.gbdt import LightGBM, XGBoost
 from torch_frame.data import Dataset
@@ -15,106 +15,106 @@ import utils
 
 SEED = 42
 DATASET_TO_DB = {
-    'rel-stackex': 'stack_exchange/stackex.db',
+    'rel-stack': 'stack/stack.db',
     'rel-amazon': 'amazon/amazon.db',
     'rel-hm': 'hm/hm.db',
     'rel-f1': 'f1/f1.db',
 }
 TASK_PARAMS = {
-    'rel-stackex-engage': {
-        'dir': 'stack_exchange/engage',
+    'rel-stack-user-engagement': {
+        'dir': 'stack/user-engagement',
         'target_col': 'contribution',
-        'table_prefix': 'engage',
+        'table_prefix': 'user_engagement',
         'identifier_cols': ['OwnerUserId', 'timestamp'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
-    'rel-stackex-badges': {
-        'dir': 'stack_exchange/badges',
+    'rel-stack-user-badge': {
+        'dir': 'stack/user-badge',
         'target_col': 'WillGetBadge',
-        'table_prefix': 'badges',
+        'table_prefix': 'user_badge',
         'identifier_cols': ['UserId', 'timestamp'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
 
     },
-    'rel-stackex-votes': {
-        'dir': 'stack_exchange/votes',
+    'rel-stack-post-votes': {
+        'dir': 'stack/post-votes',
         'target_col': 'popularity',
-        'table_prefix': 'votes',
+        'table_prefix': 'post_votes',
         'identifier_cols': ['PostId', 'timestamp'],
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
 
     },
-    'rel-amazon-churn': {
-        'dir': 'amazon/churn',
+    'rel-amazon-user-churn': {
+        'dir': 'amazon/user-churn',
         'target_col': 'churn',
-        'table_prefix': 'churn',
+        'table_prefix': 'user_churn',
         'identifier_cols': ['customer_id', 'timestamp'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
-    'rel-amazon-ltv': {
-        'dir': 'amazon/ltv',
+    'rel-amazon-user-ltv': {
+        'dir': 'amazon/user-ltv',
         'target_col': 'ltv',
-        'table_prefix': 'ltv',
+        'table_prefix': 'user_ltv',
         'identifier_cols': ['customer_id', 'timestamp'],
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
     },
-    'rel-amazon-product-churn': {
-        'dir': 'amazon/product-churn',
+    'rel-amazon-item-churn': {
+        'dir': 'amazon/item-churn',
         'target_col': 'churn',
-        'table_prefix': 'product_churn',
+        'table_prefix': 'item_churn',
         'identifier_cols': ['product_id', 'timestamp'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
-    'rel-amazon-product-ltv': {
-        'dir': 'amazon/product-ltv',
+    'rel-amazon-item-ltv': {
+        'dir': 'amazon/item-ltv',
         'target_col': 'ltv',
-        'table_prefix': 'product_ltv',
+        'table_prefix': 'item_ltv',
         'identifier_cols': ['product_id', 'timestamp'],
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
     },
-    'rel-hm-sales': {
-        'dir': 'hm/sales',
+    'rel-hm-item-sales': {
+        'dir': 'hm/item-sales',
         'target_col': 'sales',
-        'table_prefix': 'sales',
+        'table_prefix': 'item_sales',
         'identifier_cols': ['article_id', 'timestamp'],
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
     },
-    'rel-hm-churn': {
-        'dir': 'hm/churn',
+    'rel-hm-user-churn': {
+        'dir': 'hm/user-churn',
         'target_col': 'churn',
-        'table_prefix': 'churn',
+        'table_prefix': 'user_churn',
         'identifier_cols': ['customer_id', 'timestamp'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
-    'rel-f1-position': {
-        'dir': 'f1/position',
+    'rel-f1-driver-position': {
+        'dir': 'f1/driver-position',
         'target_col': 'position',
-        'table_prefix': 'position',
+        'table_prefix': 'driver_position',
         'identifier_cols': ['driverId', 'date'],
         'tune_metric': Metric.MAE,
         'task_type': TaskType.REGRESSION,
     },
-    'rel-f1-dnf': {
-        'dir': 'f1/dnf',
+    'rel-f1-driver-dnf': {
+        'dir': 'f1/driver-dnf',
         'target_col': 'did_not_finish',
-        'table_prefix': 'dnf',
+        'table_prefix': 'driver_dnf',
         'identifier_cols': ['driverId', 'date'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
     },
-    'rel-f1-qualifying': {
-        'dir': 'f1/qualifying',
+    'rel-f1-driver-top3': {
+        'dir': 'f1/driver-top3',
         'target_col': 'qualifying',
-        'table_prefix': 'qualifying',
+        'table_prefix': 'driver_top3',
         'identifier_cols': ['driverId', 'date'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
@@ -149,7 +149,8 @@ if __name__ == '__main__':
                         help='Whether to (re)generate features specified in feats.sql')
     parser.add_argument('--drop_cols', nargs='+', default=[], help='Columns to drop')
     args = parser.parse_args()
-    task_params = TASK_PARAMS[args.task]
+    full_task_name = f'{args.dataset}-{args.task}'
+    task_params = TASK_PARAMS[full_task_name]
     conn = duckdb.connect(DATASET_TO_DB[args.dataset])
     if args.generate_feats:
         print('Generating features.')
@@ -168,7 +169,7 @@ if __name__ == '__main__':
     val_df = conn.sql(f'select * from {task_params["table_prefix"]}_val_feats').df()
     test_df = conn.sql(f'select * from {task_params["table_prefix"]}_test_feats').df()
     conn.close()
-    col_to_stype = task_to_stypes[args.task]
+    col_to_stype = task_to_stypes[full_task_name]
     drop_cols = task_params['identifier_cols'] + args.drop_cols
     train_df = train_df.drop(args.drop_cols, axis=1)
     val_df = val_df.drop(args.drop_cols, axis=1)
@@ -205,22 +206,21 @@ if __name__ == '__main__':
     start = time.time()
     gbdt.tune(tf_train=train_dset.tensor_frame, tf_val=val_tf, num_trials=NUM_TRIALS)
     print(f'Hparam tuning completed in {time.time() - start:,.0f} seconds.')
-    model_path = os.path.join(task_params['dir'], f'{args.task}_{args.booster}.json')
+    model_path = os.path.join(task_params['dir'], f'{full_task_name}_{args.booster}.json')
     print(f'Saving model to "{model_path}".')
     gbdt.save(model_path)
     print()
 
     print('Evaluating model.')
-    dset = get_dataset(name=args.dataset, process=True)
-    task = dset.get_task(args.task, process=True)
+    task = get_task(args.dataset, args.task, download=True)
     print()
     pred = gbdt.predict(tf_test=val_tf).numpy()
-    assert len(task.val_table.df) == len(val_df), 'Val: feature df does not match label df!'
-    pred = map_preds(val_df, task.val_table.df, task_params['identifier_cols'], pred)
-    print(f"Val: {task.evaluate(pred, task.val_table)}")
+    assert len(task.get_table("val").df) == len(val_df), 'Val: feats df doesn\'t match label df!'
+    pred = map_preds(val_df, task.get_table("val").df, task_params['identifier_cols'], pred)
+    print(f'Val: {task.evaluate(pred, task.get_table("val"))}')
     print()
     test_tf = train_dset.convert_to_tensor_frame(test_df)
-    assert len(task.test_table.df) == len(test_df), 'Test: feature df does not match label df!'
+    assert len(task.get_table("test").df) == len(test_df), 'Test: feats df doesn\'t match label df!'
     pred = gbdt.predict(tf_test=test_tf).numpy()
-    pred = map_preds(test_df, task.test_table.df, task_params['identifier_cols'], pred)
-    print(f"Test: {task.evaluate(pred)}")
+    pred = map_preds(test_df, task.get_table("test").df, task_params['identifier_cols'], pred)
+    print(f'Test: {task.evaluate(pred)}')
