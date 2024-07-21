@@ -47,5 +47,5 @@ Assuming you have set up the DuckDB instance as indicated above, you can train a
 following command:
 
 ```shell
-python train_gbdt.py --dataset rel-amazon --task rel-amazon-user-churn --generate_feats
+python train_gbdt.py --dataset rel-amazon --task user-churn --generate_feats
 ```
