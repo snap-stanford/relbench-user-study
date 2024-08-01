@@ -38,6 +38,7 @@ user_feats as (
 attendance_window_fns as materialized (
     select
         a.user_id,
+        a.start_time as timestamp,
         count(case when a.status == 'invited' then a.status end) over monthly as num_invited,
         count(case when a.status == 'yes' then a.status end) over monthly as num_yes,
         count(case when a.status == 'no' then a.status end) over monthly as num_no,
@@ -54,7 +55,8 @@ attendance_window_fns as materialized (
 
 interest_window_fns as materialized (
     select
-        i.user_id,
+        i.user as user_id,
+        i.timestamp,
         sum(i.invited) over monthly as num_invites,
         sum(i.interested) over monthly as num_interested,
         sum(i.not_interested) over monthly as num_not_interested,
@@ -64,7 +66,7 @@ interest_window_fns as materialized (
         as num_invited_and_not_interested
     from event_interest as i
     window monthly as (
-        partition by i.user_id
+        partition by i.user
         order by i.timestamp asc
         range between interval '1 month' preceding and current row
     )
@@ -76,7 +78,7 @@ select
     {% if set != 'test' +%} -- noqa
         labels.target,
     {% endif %}
-    user_feats.* exclude (user_feats.user_id, user_feats.timestamp),
+    user_feats.* exclude (user_id, timestamp),
 {% for i in [1, 2, 3, 4, 5] %}
     past_{{ i }}_att.num_invited as past_{{ i }}_num_invited,
     past_{{ i }}_att.num_yes as past_{{ i }}_num_yes,
@@ -96,7 +98,7 @@ left join user_feats
     on
         labels.user = user_feats.user_id
         and labels.timestamp = user_feats.timestamp
-{% for i in [1, 2, 3] %}
+{% for i in [1, 2, 3, 4, 5] %}
     asof left join attendance_window_fns as past_{{ i }}_att
         on
             labels.user = past_{{ i }}_att.user_id
