@@ -19,6 +19,7 @@ DATASET_TO_DB = {
     'rel-amazon': 'amazon/amazon.db',
     'rel-hm': 'hm/hm.db',
     'rel-f1': 'f1/f1.db',
+    'rel-event': 'event/event.db',
 }
 TASK_PARAMS = {
     'rel-stack-user-engagement': {
@@ -118,6 +119,30 @@ TASK_PARAMS = {
         'identifier_cols': ['driverId', 'date'],
         'tune_metric': Metric.ROCAUC,
         'task_type': TaskType.BINARY_CLASSIFICATION,
+    },
+    'rel-event-user-repeat': {
+        'dir': 'event/user-repeat',
+        'target_col': 'target',
+        'table_prefix': 'user_repeat',
+        'identifier_cols': ['user', 'timestamp'],
+        'tune_metric': Metric.ROCAUC,
+        'task_type': TaskType.BINARY_CLASSIFICATION,
+    },
+    'rel-event-user-ignore': {
+        'dir': 'event/user-ignore',
+        'target_col': 'target',
+        'table_prefix': 'user_ignore',
+        'identifier_cols': ['user', 'timestamp'],
+        'tune_metric': Metric.ROCAUC,
+        'task_type': TaskType.BINARY_CLASSIFICATION,
+    },
+    'rel-event-user-attendance': {
+        'dir': 'event/user-attendance',
+        'target_col': 'target',
+        'table_prefix': 'user_attendance',
+        'identifier_cols': ['user', 'timestamp'],
+        'tune_metric': Metric.MAE,
+        'task_type': TaskType.REGRESSION,
     },
 }
 NUM_TRIALS = 10
