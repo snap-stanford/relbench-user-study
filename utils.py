@@ -32,7 +32,12 @@ DATASET_INFO = {
                    'reported_event_totals', 'designs', 'eligibilities', 'interventions',
                    'conditions', 'facilities', 'sponsors', 'interventions_studies',
                    'conditions_studies', 'facilities_studies', 'sponsors_studies'],
-        'tasks': ['outcome', 'adverse', 'site']
+        'tasks': ['study-outcome', 'study-adverse', 'site-success']
+    },
+
+    'rel-event': {
+        'tables': ['users', 'events', 'event_attendees', 'event_interest', 'user_friends'],
+        'tasks': ['user-repeat', 'user-ignore', 'user-attendance']
     }
 }
 
