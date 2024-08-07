@@ -38,7 +38,13 @@ DATASET_INFO = {
     'rel-event': {
         'tables': ['users', 'events', 'event_attendees', 'event_interest', 'user_friends'],
         'tasks': ['user-repeat', 'user-ignore', 'user-attendance']
-    }
+    },
+
+    'rel-avito': {
+        'tables': ['AdsInfo', 'Category', 'Location', 'PhoneRequestsStream', 'SearchInfo',
+                   'SearchStream', 'UserInfo', 'VisitStream'],
+        'tasks': ['ad-ctr', 'user-clicks', 'user-visits']
+    },
 }
 
 
