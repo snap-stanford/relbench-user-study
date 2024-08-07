@@ -3,7 +3,7 @@
 [![Relbench Website](https://img.shields.io/badge/website-live-brightgreen)](https://relbench.stanford.edu)
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40RelBench)](https://twitter.com/RelBench)
 
-[**Website**](https://relbench.stanford.edu) | [**Relbench Repo**](https://github.com/snap-stanford/relbench) | [**Vision Paper**](https://relbench.stanford.edu/paper.pdf) | [**Mailing List**](https://groups.google.com/forum/#!forum/relbench/join)
+[**Website**](https://relbench.stanford.edu) | [**Relbench Repo**](https://github.com/snap-stanford/relbench) | [**Paper**](https://arxiv.org/abs/2407.20060) | [**Mailing List**](https://groups.google.com/forum/#!forum/relbench/join)
 
 ## Description
 
